@@ -65,6 +65,7 @@
         <h3 class="center">Estacionamiento</h3>
     <div class="col s5">
             <p class="center striped">Lugares disponibles:	{{num}}</p>
+
     <div class="row">
       <div class="col s3">
         <form id="formulario" action="{{url_for('indexw')}}" method="post">
@@ -88,6 +89,7 @@
               <th class="center">Seccion</th>
               <th class="center"> Tiempo / Transcurrido</th>
               <th class="center">Cuota / Actual</th>
+              <th class="center">Estatus</th>
               <th class="center">Eliminar</th>
            </tr>
          </thead>
@@ -97,8 +99,9 @@
                {% for d in row %}
                    <td class="center">{{ d }}</td>
                {% endfor %}
-
+               <td class="center green-text">Corriendo</td>
                <td class="center"> <a  href="{{url_for('delete', id='')}}{{ row[0] }}"><i class="material-icons">delete</i></a></td>
+
                </tr>
            {% endfor %}
      </table>
