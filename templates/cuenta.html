@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/alertify.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/bootstrap.min.css"/>
+    <title>Cuenta</title>
+</head>
+<body background="blue">
+ 
+  {% include "nav.html" %}
+
+<script>
+
+function val(){
+  if (document.getElementById('pass').value =="" || document.getElementById('repass').value=="" || document.getElementById('email').value=="") {
+    alertify.error("Completa los campos");
+  }else if (document.getElementById('pass').value != document.getElementById('repass').value) {
+    document.getElementById('pass').focus();
+    alertify.error("Las contrasenias no coinciden...");
+  }else{
+     alert("Datos actualizados")
+     document.getElementById('form').submit();
+  }
+}
+</script>
+
+
+  <div class="row">
+  	<div class="col s4 offset-s4">
+  		<form method="post" id="form" action="{{url_for('editar')}}">
+  			<center><h3>Datos</h3></center>
+  			<label for="txt_usuario">Usuario</label>
+  			<input type="text" value={{usuario}} name="txt_usuario" disabled="" id="usuario">
+        <label for="txt_usuario">Email</label>
+        <input type="text" value="{{email}}" name="txt_email" id="email">
+  			<label for="txt_pass">Password</label>
+  			<input type="password" id="pass" name="txt_pass">
+        <label for="txt_repass">Confirmar</label>
+        <input type="password"  id="repass" name="txt_repassword">
+  			<input type="button" class="btn" value="Actualizar" onclick="val();">
+  		</form>
+  	</div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Response</title>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <!-- Compiled and minified CSS -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css'>
+
+  <!-- Compiled and minified JavaScript -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js'></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/alertify.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/bootstrap.min.css"/>
+
+</head>
+<body>
+ <nav>
+    <div class="nav-wrapper blue-grey lighten-1 ">
+              <a class="brand-logo">EATech</a>
+              <a href="#" data-activates="mobile-demo1" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="#" onclick="window.location.reload(true)" >Inicio</a></li>
+          <li><a href="/Usuario" >Salir</a></li>
+         
+        </ul>
+              
+      <!-- navbar for mobile -->
+    <ul class="side-nav" id="mobile-demo1">
+          <a href="#" data-activates="mobile-demo1" class="button-collapse"><i class="material-icons">android</i></a>
+            <li><a href="#" onclick="window.location.reload(true)" >Inicio</a></li>
+          <li><a href="/Usuario" >Salir</a></li>
+    </ul>
+    </div>
+</nav>
+<script>
+    $('.dropdown-trigger').dropdown();
+    </script>
+    <script>
+  (function($) {
+    $(function() {
+
+$('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      hover: true, // Activate on hover
+      belowOrigin: true, // Displays dropdown below the button
+      alignment: 'left' // Displays dropdown with edge aligned to the left of button
+    }
+  );
+
+    }); // End Document Ready
+})(jQuery); // End of jQuery name space
+</script>
+
+
+  <script type="text/javascript">
+    $(".button-collapse").sideNav();
+  </script>
+
+  <br><br>
+
+<div class="row">
+
+</div>
+
+  <div class="row">
+    <div class="col s2 m2 l2 offset-s5 " id="dp">
+         
+
+    <table style="width:100%">
+      <caption class="blue-grey lighten-1 white-text" style="font-size: 30px;">Informacion</caption>     
+  <tr>
+    <th>Boleto:</th>
+    <td>{{boleto}}</td>
+  </tr>
+  <tr>
+    <th>Tipo:</th>
+    <td>{{tipo}}</td>
+  </tr>
+  <tr>
+    <th>Hora Entrada:</th>
+    <td>{{horae}}</td>
+  </tr>
+  <tr>
+    <th>Tarifa:</th>
+    <td>{{cuota}} $ / HR</td>
+  </tr>
+  <tr>
+    <th>Seccion:</th>
+    <td>{{seccion}}</td>
+  </tr>
+  <tr>
+    <th>T. Transcurrido:</th>
+    <td>{{diferencia}}</td>
+  </tr>
+  <tr>
+    <th>Cuota Actual:</th>
+    <td>{{cuoActual}} $</td>
+  </tr>
+  <tr>
+    <th>Status:</th>
+    <td class="green-text">Corriendo.</td>
+  </tr>
+</table>
+    </div>
+    <!--
+      <div class="col s1 " id="dr">
+          {% for row in info %}
+              {% for d in row %}
+              <p>{{d}}</p>
+              {% endfor %}
+          {% endfor %}
+          <p>{{status}}-</p>
+         </div>
+    -->
+
+      </div>
+      <div class="row">
+        <div class="col s2 offset-s5" id="btnp">
+          <input type="button" class="btn " value="Pagar" onclick="pago();" >
+        </div>
+      </div>
+
+  </div>
+
+  <script type="text/javascript">
+    function pago() {
+      document.getElementById("dp").className = "col s2 m2 l2 offset-s5";
+      var db=document.getElementById('btnp').innerHTML="";
+      var form='<form action="/delete?bol={{boleto}}" id="app" method="post" @submit="checkForm" style="width:100%">'+
+      '<h1 class="blue-grey lighten-1 white-text center-align" style="font-size: 30px;">Pago</h1>'+
+      '<label for="">Numero de tarjeta</label><input type="number" placeholder="XXXX-XXXX-XXXX-XXXX" name="txt_tarjeta" required aria-required="true" id="tarjeta" v-model="tarjeta">'+
+      '<label for="">Titular</label><input type="text" placeholder="Nombre.." required name="txt_nombre" id="nombre">'+
+      '<label for="">CCV</label><input type="number" placeholder="XXX" required name="ccv" id="ccv" v-model="ccv">'+
+      '<label for="">Expira:</label><br><br><input type="date" required name="txt_expira"><br><br>'+
+      '<input type="submit" class="btn" value="Confirmar" id="btn_confirmar"><br><br>'+
+      '<input type="button" class="btn red" value="Cancelar" onclick="window.location.reload(true);">'+
+      '</form>';
+      document.getElementById('dp').innerHTML=form;
+
+  const app = new Vue({
+  el: '#app',
+  data: {
+    errors: [],
+    ccv: null,
+    tarjeta: null
+  },
+  methods: {
+    checkForm: function (e) {
+      this.errors = [];
+
+      if (!this.validTarget(this.tarjeta)) {
+        this.errors.push('La tarjeta debe ser válida.');
+        alertify.error('Tarjeta invalida');
+      }
+
+      if (!this.validCcv(this.ccv)) {
+        this.errors.push('CCV debe ser válida.');
+        alertify.error('CCV invalido');
+      }
+
+
+      if (!this.errors.length) {
+        return true;
+      }
+
+      e.preventDefault();
+    },
+
+    validTarget: function(tarjeta){
+    var ret = /\b[0-9]{13,16}\b/;
+    return ret.test(tarjeta);
+    },
+    validCcv: function(ccv){
+    var rec = /\b[0-9]{3}\b/;
+    return rec.test(ccv);
+    }
+  }
+})
+
+    }
+  </script>
+
+    
+</body>
+</html>
