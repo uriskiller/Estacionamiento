@@ -54,6 +54,8 @@ options = {
 
 
 tfnet =TFNet(options)
+cap = cv2.VideoCapture(0)
+
 
 
 @app.route("/AdminYolo")
@@ -117,7 +119,7 @@ def kit():
       'fechapa': fea
     }
 
-    img = qrcode.make(str(bol))
+    img = qrcode.make(str(bol)+"-salida")
     f = open("static/output.png", "wb")
     img.save(f)
     f.close()
@@ -282,30 +284,40 @@ def ins(label):
     cur.execute(query);
     db.commit()
 
-
 def decode(im) : 
     # Find barcodes and QR codes
     decodedObjects = pyzbar.decode(im)
-    # Print results
     for obj in decodedObjects:
-        print('Type : ', obj.type)
-        print('Data : ', obj.data,'\n')     
+        print('Data : ', obj.data,'\n')
+        if "salida" in str(obj.data):
+               print('Boleto valido puedes salir.')
+               cap.release()
+               time.sleep(1)
+               print('Levantando pluma...')
+               cadena = str(obj.data).replace("b", "")
+               bol = cadena.replace("-salida","")
+               update='UPDATE cars set token=0 WHERE numBoleto = '+bol+';'
+               cur2.execute(update)
+               print (update)
+               time.sleep(3)
+               print('Capturando...')
     return decodedObjects
 
 def get_frame() : 
-    cap = cv2.VideoCapture(0)
     cap.set(3,640)
     cap.set(4,480)
     time.sleep(2)    
     font = cv2.FONT_HERSHEY_SIMPLEX
-
+    
     while(cap.isOpened()):
         # Capture frame-by-frame
         ret, frame = cap.read()
         # Our operations on the frame come here
         im = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-             
+
+                
         decodedObjects = decode(im)
+
 
         for decodedObject in decodedObjects: 
             points = decodedObject.polygon
@@ -326,13 +338,14 @@ def get_frame() :
             x = decodedObject.rect.left
             y = decodedObject.rect.top
 
-            print(x, y)
+            #print(x, y)
 
-            print('Type : ', decodedObject.type)
-            print('Data : ', decodedObject.data,'\n')
+            #print('Type : ', decodedObject.type)
+            #print('Data : ', decodedObject.data,'\n')
 
             barCode = str(decodedObject.data)
             cv2.putText(frame, barCode, (x, y), font, 1, (0,255,255), 2, cv2.LINE_AA)
+
                    
         # Display the resulting frame
         #cv2.imshow('frame',frame)
@@ -546,4 +559,4 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 usuario="Undefined"
 
 if __name__ == "__main__":
-    app.run(host='localhost', debug=True, threaded=True)
+    app.run(host='localhost', debug=False, threaded=True)
