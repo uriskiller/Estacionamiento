@@ -3,7 +3,6 @@
 from __future__ import print_function
 import pyzbar.pyzbar as pyzbar
 from flask import Flask, Response, request, render_template, session, redirect, escape, url_for,jsonify,json,flash
-import json
 from hashlib import md5
 import MySQLdb
 import cv2
@@ -32,7 +31,6 @@ from utils import visualization_utils as vis_util
 import itertools
 import qrcode
 
-#Uriel
 
 
 app = Flask(__name__)
@@ -54,7 +52,6 @@ options = {
 
 
 tfnet =TFNet(options)
-cap = cv2.VideoCapture(0)
 
 
 
@@ -291,19 +288,18 @@ def decode(im) :
         print('Data : ', obj.data,'\n')
         if "salida" in str(obj.data):
                print('Boleto valido puedes salir.')
-               cap.release()
                time.sleep(1)
                print('Levantando pluma...')
                cadena = str(obj.data).replace("b", "")
                bol = cadena.replace("-salida","")
                update='UPDATE cars set token=0 WHERE numBoleto = '+bol+';'
                cur2.execute(update)
-               print (update)
                time.sleep(3)
                print('Capturando...')
     return decodedObjects
 
-def get_frame() : 
+def get_frame() :
+    cap = cv2.VideoCapture(0) 
     cap.set(3,640)
     cap.set(4,480)
     time.sleep(2)    
